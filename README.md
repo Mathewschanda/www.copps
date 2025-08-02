@@ -1,4 +1,4 @@
-<doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -8,6 +8,7 @@
   <!-- my css -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/6.6.0/css/all.min.css"/>
 <!-- signin/signup starts-->
+
 <section id="search">
     
   <style>
@@ -26,6 +27,10 @@ html, body {
   background-color: #cad6ff;
   background: #c9d6ff;
 }
+.infor {
+    margin-left: 40px;
+    align-items: center;
+}
 
 .all{
 width: 900px;
@@ -35,7 +40,7 @@ margin: 20px auto;
 }
 #signuppage{
 background: #fff;
-width: 450px;
+width: 80%;
 padding: 1.5rem;
 margin: 50px auto;
 border-radius: 10px;
@@ -228,6 +233,130 @@ color: blue;
   <h4>Hello <span id="userDisplay"></span>!</h4>
 
   <div id="products" class="mt-3">
+    
+
+
+
+ 
+ 
+  
+  <style>
+ 
+    .container {
+      width: 100%;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .inside h1,.inside h2, .inside h3 {
+      text-align: center;
+      color: blue;
+      text-decoration: underline;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .clear-btn {
+      background-color: #dc3545;
+    }
+    .clear-btn:hover {
+      background-color: #c82333;
+    }
+    .history-container {
+      display: none;
+      width: 90%;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    ol {
+      list-style-type: decimal;
+      padding: 10px;
+    }
+    li {
+      padding: 2px;
+      border-bottom: 1px solid #ccc;
+    }
+    
+    
+
+  </style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>copps.com</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/6.6.0/css/all.min.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "poppins", Sans-Serif;
+    }
+    html, body {
+      height: 100%;
+      width: 100%;
+      background-color: #cad6ff;
+    }
+    .infor {
+      margin-left: 40px;
+    }
+    .container {
+      width: 100%;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .inside h1, .inside h2, .inside h3 {
+      text-align: center;
+      color: blue;
+      text-decoration: underline;
+    }
+    .history-container {
+      display: none;
+      width: 90%;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    ol { list-style-type: decimal; padding: 10px; }
+    li { padding: 2px; border-bottom: 1px solid #ccc; }
+  </style>
+</head>
+<body>
     
 
 
@@ -924,4 +1053,325 @@ alert('Please type in the item you are searching for');
   
 li.textContent = `${item.productName} - K${item.price.replace('$', 'k')}`;
 
-  function placeOrder(
+  function placeOrder() {
+    if (cart.length === 0) {
+      alert('Cart is empty!');
+      return;
+    }
+    const order = {
+      user: localStorage.getItem('currentUser'),
+      items: cart,
+      date: new Date().toLocaleString()
+    };
+    let orders = JSON.parse(localStorage.getItem('orders')) || [];
+    orders.push(order);
+    localStorage.setItem('orders', JSON.stringify(orders));
+
+    alert('Order placed successfully!');
+    cart = [];
+    updateCartDisplay();
+  }
+
+  function viewOrders() {
+    const orderHistory = document.getElementById('orderHistory');
+    const orderList = document.getElementById('orderList');
+    orderHistory.style.display = 'block';
+    orderList.innerHTML = '';
+
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    const currentUser = localStorage.getItem('currentUser');
+
+    const userOrders = orders.filter(order => order.user === currentUser);
+
+    if (userOrders.length === 0) {
+      orderList.innerHTML = '<li class="list-group-item">No orders yet.</li>';
+      return;
+    }
+
+    userOrders.forEach((order, index) => {
+      const li = document.createElement('li');
+      li.className = 'list-group-item';
+      li.innerHTML = `
+        <strong>Order ${index + 1}</strong> - ${order.date}
+        <ul>
+          ${order.items.map(item => `<li>${item.productName} - $${item.price}</li>`).join('')}
+        </ul>
+      `;
+      orderList.appendChild(li);
+    });
+  }
+
+  
+
+  function logout() {
+    localStorage.removeItem('currentUser');
+    cart = [];
+    updateCartDisplay();
+    showLogin();
+  }
+</script>
+
+  
+  
+
+
+
+
+
+  <div class="d-grid gap-2">
+    <button class="btn btn-warning" onclick="placeOrder()">Place Order</button>
+    <button class="btn btn-info" onclick="viewOrders()">View Order History</button>
+    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+  </div>
+
+  <div id="orderHistory" style="display:none;">
+    <h5 class="mt-4">Order History</h5>
+    <ul id="orderList" class="list-group"></ul>
+  </div>
+</div>
+
+<script>
+
+  let cart = [];
+
+  function signup() {
+    const username = document.getElementById('signupUsername').value.trim();
+    const password = document.getElementById('signupPassword').value.trim();
+
+    if (username === '' || password === '') {
+      alert('Please enter username and password.');
+      return;
+    }
+
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+
+    if (users.some(user => user.username === username)) {
+      alert('Username already exists.');
+      return;
+    }
+
+    users.push({ username, password });
+    localStorage.setItem('users', JSON.stringify(users));
+
+    alert('Signup successful!');
+    showLogin();
+  }
+
+  function login() {
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+
+    if (username === '' || password === '') {
+      alert('Please enter username and password.');
+      return;
+    }
+
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(u => u.username === username && u.password === password);
+
+    if (!user) {
+      alert('Incorrect username or password.');
+      return;
+    }
+
+    localStorage.setItem('currentUser', username);
+    document.getElementById('userDisplay').innerText = username;
+    showShop();
+  }
+
+  function togglePassword(fieldId, btn) {
+    const passwordField = document.getElementById(fieldId);
+
+    if (passwordField.type === 'password') {
+      passwordField.type = 'text';
+      btn.textContent = '🙈';
+    } else {
+      passwordField.type = 'password';
+      btn.textContent = '👁️';
+    }
+  }
+
+  function showSignup() {
+    document.getElementById('signupPage').style.display = 'block';
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('shopPage').style.display = 'none';
+  }
+
+  function showLogin() {
+    document.getElementById('signupPage').style.display = 'none';
+    document.getElementById('loginPage').style.display = 'block';
+    document.getElementById('shopPage').style.display = 'none';
+  }
+
+  function showShop() {
+    document.getElementById('signupPage').style.display = 'none';
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('shopPage').style.display = 'block';
+  }
+
+
+function addToCart(productName, price) {
+  cart.push({ productName, price });
+  updateCartDisplay();
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1); // Remove 1 item at the given index
+  updateCartDisplay();
+}
+
+function updateCartDisplay() {
+  const cartList = document.getElementById('cartList');
+  const totalPriceElement = document.getElementById('totalPrice');
+
+  cartList.innerHTML = '';
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    const li = document.createElement('li');
+    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+    const price = parseFloat(item.price.toString().replace(/[^0-9.-]+/g, ''));
+    total += price;
+
+    li.innerHTML = `
+      ${item.productName} - K${price.toFixed(2)}
+      
+      <button 
+  style="background-color: #ff4d4f; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;"
+      class="btn2" onclick="removeFromCart(${index})">
+<i class="fa fa-minus-square"</i>Remove</button>
+    `;
+
+    cartList.appendChild(li);
+  });
+
+  totalPriceElement.textContent = `Total: K${total.toFixed(2)}`;
+}
+  function placeOrder() {
+    if (cart.length === 0) {
+      alert('Cart is empty!');
+      return;
+    }
+    const order = {
+      user: localStorage.getItem('currentUser'),
+      items: cart,
+      date: new Date().toLocaleString()
+    };
+    let orders = JSON.parse(localStorage.getItem('orders')) || [];
+    orders.push(order);
+    localStorage.setItem('orders', JSON.stringify(orders));
+
+    alert('Order placed successfully!');
+    cart = [];
+    updateCartDisplay();
+  }
+
+  function viewOrders() {
+    const orderHistory = document.getElementById('orderHistory');
+    const orderList = document.getElementById('orderList');
+    orderHistory.style.display = 'block';
+    orderList.innerHTML = '';
+
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    const currentUser = localStorage.getItem('currentUser');
+
+    const userOrders = orders.filter(order => order.user === currentUser);
+
+    if (userOrders.length === 0) {
+      orderList.innerHTML = '<li class="list-group-item">No orders yet.</li>';
+      return;
+    }
+
+    userOrders.forEach((order, index) => {
+      const li = document.createElement('li');
+      li.className = 'list-group-item';
+      li.innerHTML = `
+        <strong>Order ${index + 1}</strong> - ${order.date}
+        <ul>
+          ${order.items.map(item => `<li>${item.productName} :k${item.price}</li>`).join('')}
+        </ul>
+      `;
+      orderList.appendChild(li);
+    });
+  }
+
+
+// Get number of orders
+function getNumberOfOrders() {
+  const orders = JSON.parse(localStorage.getItem('orders')) || [];
+  const currentUser = localStorage.getItem('currentUser');
+  const userOrders = orders.filter(order => order.user === currentUser);
+  return userOrders.length;
+}
+
+// Display gift icon
+function displayGiftIcon() {
+  const numberOfOrders = getNumberOfOrders();
+  if (numberOfOrders >= 5) {
+    const giftIcon = document.createElement('div');
+    giftIcon.innerHTML = '🎁 GET YOUR LOYALTY PRIZE NOW!';
+    giftIcon.style.position = 'fixed';
+    giftIcon.style.top = '90px'; // Changed to top
+    giftIcon.style.right = '20px';
+    giftIcon.style.background = '#fff';
+    giftIcon.style.padding = '10px';
+    giftIcon.style.borderRadius = '10px';
+    giftIcon.style.cursor = 'pointer';
+    giftIcon.onclick = claimPrize;
+    document.body.appendChild(giftIcon);
+  }
+}
+
+// Claim prize functionality
+function claimPrize() {
+  // Give prize logic here
+  alert('Congratulations! You have received your loyalty prize!');
+  
+  // Clear order history for current user
+  const orders = JSON.parse(localStorage.getItem('orders')) || [];
+  const currentUser = localStorage.getItem('currentUser');
+  const updatedOrders = orders.filter(order => order.user !== currentUser);
+  localStorage.setItem('orders', JSON.stringify(updatedOrders));
+  
+  // Update order display
+  viewOrders();
+  
+  // Remove gift icon
+  const giftIcons = document.querySelectorAll('div');
+  giftIcons.forEach(icon => {
+    if (icon.innerHTML.includes('🎁')) {
+      icon.remove();
+    }
+  });
+}
+// Modified placeOrder function
+function placeOrder() {
+  if (cart.length === 0) {
+    alert('Cart is empty!');
+    return;
+  }
+  const order = {
+    user: localStorage.getItem('currentUser'),
+    items: cart,
+    date: new Date().toLocaleString()
+  };
+  let orders = JSON.parse(localStorage.getItem('orders')) || [];
+  orders.push(order);
+  localStorage.setItem('orders', JSON.stringify(orders));
+  alert('Order placed successfully!');
+  cart = [];
+  updateCartDisplay();
+  displayGiftIcon(); // Call displayGiftIcon function
+}
+  
+  function logout() {
+    localStorage.removeItem('currentUser');
+    cart = [];
+    updateCartDisplay();
+    showLogin();
+  }
+</script>
+
+</body>
+</html>
