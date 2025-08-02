@@ -952,7 +952,15 @@ alert('Please type in the item you are searching for');
 }
 }
 
+function showLogin() {
+  document.getElementById('signupPage').style.display = 'none';
+  document.getElementById('loginPage').style.display = 'block';
+}
 
+function showSignup() {
+  document.getElementById('signupPage').style.display = 'block';
+  document.getElementById('loginPage').style.display = 'none';
+}
 </csript>
 
 
