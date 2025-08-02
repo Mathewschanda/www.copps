@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- my css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/6.6.0/css/all.min.css"/>
 <!-- signin/signup starts-->
 
 <section id="search">
